@@ -25,8 +25,7 @@
 #include <cassert>
 #include <cstdlib>
 
-#define GLEW_STATIC 1
-#include <QtOpenGL>
+#include <QOpenGLFunctions>
 #include <float.h>
 
 #include <cmath>

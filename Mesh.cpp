@@ -143,8 +143,8 @@ void Mesh::draw( std::vector<bool> & selected, std::vector<bool> & fixed)
         if( fixed[ vi[0] ] && fixed[ vi[1] ] && fixed[ vi[2] ])
             glColor3f( 0., 0.8,0. );
         else
-            glColor3f(1.,1.,1.);
-        glTriangle( i);
+            glColor3f(0.37,0.55,0.82);
+        glTriangle( i );
 
     }
 

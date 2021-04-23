@@ -3,7 +3,7 @@
 
 #include "ARAPViewer.h"
 
-#include <QGLContext>
+#include <QOpenGLContext>
 
 #if QT_VERSION >= 0x040000
 # include <QKeyEvent>
@@ -20,6 +20,8 @@ ARAPViewer::~ARAPViewer(){}
 
 void ARAPViewer::init()
 {
+    makeCurrent();
+    initializeOpenGLFunctions();
     // Absolutely needed for MouseGrabber
     setMouseTracking(true);
 
@@ -50,7 +52,7 @@ void ARAPViewer::init()
     manipulatorScale = 1.;
     deformation = false;
 
-    meshInterface = MMInterface< Vec3Df >(QGLContext::fromOpenGLContext(this->context()));
+    meshInterface = MMInterface< Vec3Df >();
 
 }
 
@@ -66,6 +68,7 @@ void ARAPViewer::initLightsAndMaterials() {
 
 void ARAPViewer::mousePressEvent(QMouseEvent* e )
 {
+
 
     if( deformation ){
         if( ( e->modifiers() & Qt::ShiftModifier ) )
@@ -101,6 +104,7 @@ void ARAPViewer::mousePressEvent(QMouseEvent* e )
         else if ((e->button() == Qt::RightButton) && (e->modifiers() & Qt::ControlModifier))
         {
             bool found;
+
             qglviewer::Vec point = camera()->pointUnderPixel(e->pos(), found);
             if( found ){
                 manipulator->clear();
@@ -192,15 +196,27 @@ void ARAPViewer::setTopositions(const vector<Vec3Df> & positions){
 
 void ARAPViewer::addToSelection( QRectF const & zone , bool moving )
 {
+
     if(manipulator->getEtat()) manipulator->deactivate();
 
-    meshInterface.select(zone , moving);
+    float modelview[16];
+    camera()->getModelViewMatrix(modelview);
+    float projection[16];
+    camera()->getProjectionMatrix(projection);
+
+    meshInterface.select(zone , modelview, projection, moving);
 }
 
 void ARAPViewer::removeFromSelection( QRectF const & zone )
 {
     if(manipulator->getEtat()) manipulator->deactivate();
-    meshInterface.unselect(zone);
+
+    float modelview[16];
+    camera()->getModelViewMatrix(modelview);
+    float projection[16];
+    camera()->getProjectionMatrix(projection);
+
+    meshInterface.unselect(zone , modelview, projection);
 }
 
 void ARAPViewer::computeManipulatorForDeformation()
@@ -310,9 +326,9 @@ void ARAPViewer::saveCamera(const QString &filename){
 std::istream & operator>>(std::istream & stream, qglviewer::Vec & v)
 {
     stream >>
-              v.x >>
-              v.y >>
-              v.z;
+            v.x >>
+            v.y >>
+            v.z;
 
     return stream;
 }

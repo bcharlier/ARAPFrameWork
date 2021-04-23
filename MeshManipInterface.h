@@ -67,8 +67,6 @@ class MMInterface
 
     GLuint sphere_index;
 
-    QGLContext * input_context;
-
     float sphere_scale ;
 
 public:
@@ -98,8 +96,6 @@ public:
 
     inline vector< bool > & get_fixed_vertices () { return fixed_vertices; }
     inline const vector< bool > & get_fixed_vertices () const { return fixed_vertices; }
-
-    void setContext( const QGLContext * icontext ) { input_context = (QGLContext *)icontext; }
 
     vector< bool > get_handles_vertices (  ) {
         vector< bool > handles_vertices ( vertices.size(), false );
@@ -137,15 +133,6 @@ public:
         ARAP = AsRigidAsPossible();
     }
 
-    MMInterface( const QGLContext * icontext )
-    {
-        deformationMode = REALTIME;
-        average_edge_halfsize = 1.;
-        sphere_scale = 1.;
-        setContext( icontext );      
-        ARAP = AsRigidAsPossible();
-    }
-
     ~MMInterface()
     {
         // delete it if it is not used any more
@@ -160,8 +147,6 @@ public:
 
     void build_sphere_list(){
 
-        input_context->makeCurrent();
-
         glDeleteLists(sphere_index, 1);
 
         sphere_index = glGenLists(1);
@@ -172,8 +157,6 @@ public:
         glNewList(sphere_index, GL_COMPILE);
         BasicGL::drawSphere( 0., 0., 0., sphere_scale*average_edge_halfsize/2., 15, 15 );
         glEndList();
-
-        input_context->doneCurrent();
 
     }
 
@@ -528,15 +511,10 @@ public:
 
 
 
-    // You need to have the correct QGLContext activated for that !!!!!!!!
+    // You need to have the correct QOpenGLContext activated for that !!!!!!!!
     // This function select the cage vertices drawn inside the QRect "zone"
-    void select( QRectF const & zone, bool moving = true )
+    void select( QRectF const & zone, float *modelview, float * projection, bool moving = true )
     {
-        float modelview[16];
-        glGetFloatv(GL_MODELVIEW_MATRIX , modelview);
-        float projection[16];
-        glGetFloatv(GL_PROJECTION_MATRIX , projection);
-
 
         for( unsigned int v = 0 ; v < modified_vertices.size() ; ++v )
         {
@@ -608,14 +586,10 @@ public:
 
     }
 
-    // You need to have the correct QGLContext activated for that !!!!!!!!
+    // You need to have the correct QOpenGLContext activated for that !!!!!!!!
     // This function unselect the cage vertices drawn inside the QRect "zone"
-    void unselect( QRectF const & zone )
+    void unselect( QRectF const & zone, float *modelview, float * projection )
     {
-        float modelview[16];
-        glGetFloatv(GL_MODELVIEW_MATRIX , modelview);
-        float projection[16];
-        glGetFloatv(GL_PROJECTION_MATRIX , projection);
 
 
         for( unsigned int v = 0 ; v < modified_vertices.size() ; ++v )

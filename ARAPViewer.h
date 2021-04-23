@@ -5,7 +5,7 @@
 
 #ifndef MESHERVIEWER_H
 #define MESHERVIEWER_H
-#include "OpenGLHeader.h"
+#include "openglincludeQtComp.h"
 
 #include "Mesh.h"
 
@@ -15,7 +15,8 @@ enum Mode {MESHING, MESH_DEFORMATION, IMAGE_DEFORMATION};
 enum DisplayMode{ WIRE=0, SOLID=1, LIGHTED_WIRE=2, LIGHTED=3 };
 
 #include <QColor>
-
+#include <QOpenGLFunctions>
+#include <QOpenGLFunctions_3_1>
 #include <QGLViewer/qglviewer.h>
 #include <QString>
 
@@ -28,7 +29,7 @@ enum DisplayMode{ WIRE=0, SOLID=1, LIGHTED_WIRE=2, LIGHTED=3 };
 
 using namespace qglviewer;
 
-class ARAPViewer : public QGLViewer
+class ARAPViewer : public QGLViewer, public QOpenGLFunctions_3_1
 {
     Q_OBJECT
 public :

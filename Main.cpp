@@ -1,7 +1,7 @@
 /****************************************************************************
 
 *****************************************************************************/
-#include "OpenGLHeader.h"
+#include "openglincludeQtComp.h"
 #include "Window.h"
 #include <qapplication.h>
 

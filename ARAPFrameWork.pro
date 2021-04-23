@@ -32,7 +32,8 @@ HEADERS += Window.h \
     AsRigidAsPossible.h \
     Triangle.h \
     Edge.h \
-    Mesh.h
+    Mesh.h \
+    openglincludeQtComp.h
 SOURCES += Window.cpp \
     ARAPViewer.cpp \
     Main.cpp \
@@ -46,7 +47,6 @@ LIBS += -L/usr/lib/x86_64-linux-gnu \
     -lQGLViewer-qt5 \
     -lglut \
     -lGLU \
-    -lGLEW \
     -lgomp
 
 
