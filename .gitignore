@@ -1,0 +1,7 @@
+moc/*
+obj/*
+*.pro.user
+Makefile
+*.stash
+.qglviewer.xml
+arapFramework
