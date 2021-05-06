@@ -16,7 +16,6 @@ enum DisplayMode{ WIRE=0, SOLID=1, LIGHTED_WIRE=2, LIGHTED=3 };
 
 #include <QColor>
 #include <QOpenGLFunctions>
-#include <QOpenGLFunctions_3_1>
 #include <QGLViewer/qglviewer.h>
 #include <QString>
 
@@ -29,7 +28,7 @@ enum DisplayMode{ WIRE=0, SOLID=1, LIGHTED_WIRE=2, LIGHTED=3 };
 
 using namespace qglviewer;
 
-class ARAPViewer : public QGLViewer, public QOpenGLFunctions_3_1
+class ARAPViewer : public QGLViewer, public QOpenGLFunctions
 {
     Q_OBJECT
 public :

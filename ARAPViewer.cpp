@@ -21,13 +21,15 @@ ARAPViewer::~ARAPViewer(){}
 void ARAPViewer::init()
 {
     makeCurrent();
+
     initializeOpenGLFunctions();
+
     // Absolutely needed for MouseGrabber
     setMouseTracking(true);
 
     setBackgroundColor(QColor(255,255,255));
 
-    restoreStateFromFile();
+    //restoreStateFromFile();
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -69,6 +71,7 @@ void ARAPViewer::initLightsAndMaterials() {
 void ARAPViewer::mousePressEvent(QMouseEvent* e )
 {
 
+    makeCurrent();
 
     if( deformation ){
         if( ( e->modifiers() & Qt::ShiftModifier ) )
@@ -447,6 +450,8 @@ void ARAPViewer::draw(){
 
     glColor3f(1.,1.,1.);
     mesh.draw(meshInterface.get_selected_vertices(), meshInterface.get_fixed_vertices());
+    glColor3f(0.37,0.82,0.55);
+    model_mesh.draw();
 
     if(displayMode == SOLID || displayMode == LIGHTED_WIRE){
         glEnable (GL_POLYGON_OFFSET_LINE);

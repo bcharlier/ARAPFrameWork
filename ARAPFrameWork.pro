@@ -20,7 +20,7 @@ CONFIG += release \
 EXT_DIR = ../../extern
 
 INCLUDEPATH = ./Manipulator \
-    $${EXT_DIR}/libcholmod/CHOLMOD/Include
+    /usr/include/suitesparse
 HEADERS += Window.h \
     ARAPViewer.h \
     Manipulator/PCATools.h \
