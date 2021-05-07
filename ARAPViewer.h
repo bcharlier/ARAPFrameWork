@@ -35,9 +35,8 @@ public :
     ARAPViewer(QWidget *parent);
     ~ARAPViewer();
 
-    void openOBJ(const QString & fileName);
-    void openOFF (const QString & filename);
-    void openOFFModel (const QString & filename);
+    void openMesh(const QString & fileName);
+    void openModel (const QString & filename);
     void saveOFF (const QString & filename);
 
     void openCamera (const QString & filename);

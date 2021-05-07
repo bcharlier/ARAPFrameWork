@@ -30,6 +30,7 @@ class Window : public QMainWindow
 
         void saveMesh();
         void openMesh();
+        void openMeshModel();
         void openConstraints();
         void saveCamera();
         void openCamera();

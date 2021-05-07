@@ -240,44 +240,42 @@ void ARAPViewer::clear(){
 }
 
 
-void ARAPViewer::openOBJ(const QString & filename){
-
-    clear();
-
-    std::vector<Vec3Df> & V = mesh.getVertices();
-    std::vector<Triangle> & T = mesh.getTriangles();
-
-    FileIO::objLoader(filename.toStdString(), V, T);
-
-    updateViewer();
-
-}
-
-void ARAPViewer::openOFFModel (const QString & filename) {
-
-    model_mesh.clear();
-
-    std::vector<Vec3Df> & vertices = model_mesh.getVertices();
-    std::vector<Triangle> & triangles = model_mesh.getTriangles();
-
-    FileIO::openOFF(filename.toStdString(), vertices, triangles);
-
-    model_mesh.update();
-
-}
-
-
-void ARAPViewer::openOFF (const QString & filename) {
+void ARAPViewer::openMesh(const QString & filename){
 
     clear();
 
     std::vector<Vec3Df> & vertices = mesh.getVertices();
     std::vector<Triangle> & triangles = mesh.getTriangles();
-
-    FileIO::openOFF(filename.toStdString(), vertices, triangles);
+    if( filename.endsWith(".off")) {
+        FileIO::openOFF(filename.toStdString(), vertices, triangles);
+    } else if(filename.endsWith(".obj")) {
+        FileIO::objLoader(filename.toStdString(), vertices, triangles);
+    } else {
+        std::cout <<"ARAPViewer::openMesh::Unsupported mesh file format "<< std::endl;
+    }
 
     updateViewer();
 
+}
+
+void ARAPViewer::openModel (const QString & filename) {
+
+    model_mesh.clear();
+
+    std::vector<Vec3Df> & vertices = model_mesh.getVertices();
+    std::vector<Triangle> & triangles = model_mesh.getTriangles();
+    if( filename.endsWith(".off")) {
+        FileIO::openOFF(filename.toStdString(), vertices, triangles);
+    } else if(filename.endsWith(".obj")) {
+        FileIO::objLoader(filename.toStdString(), vertices, triangles);
+    } else {
+        std::cout <<"ARAPViewer::openModel::Unsupported mesh file format "<< std::endl;
+        return ;
+    }
+
+    model_mesh.update();
+
+    update();
 }
 
 void ARAPViewer::openConstraints (const QString & filename) {
@@ -293,7 +291,7 @@ void ARAPViewer::openConstraints (const QString & filename) {
         return;
     }
 
-    int v_id;
+    unsigned int v_id;
     float x, y, z;
 
     std::vector<std::pair<int, Vec3Df> > constraints;
@@ -304,6 +302,11 @@ void ARAPViewer::openConstraints (const QString & filename) {
             myfile >> x; myfile >> y; myfile >> z;
 
             constraints.push_back(std::make_pair(v_id, Vec3Df(x,y,z)));
+
+            if( v_id >= mesh.getVerticesNb() ){
+                std::cout <<"ARAPViewer::openConstraints::Constraints id > number of vertices "<< std::endl;
+                return ;
+            }
         }
     }
     myfile.close();

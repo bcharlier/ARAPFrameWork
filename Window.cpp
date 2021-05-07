@@ -139,13 +139,29 @@ void Window::openMesh(){
         return;
     }
 
-    if(fileName.endsWith(".off")) {
-        viewer->openOFF(fileName);
-    } else if(fileName.endsWith(".obj")) {
-        viewer->openOBJ(fileName);
-    }
+    viewer->openMesh(fileName);
 }
 
+void Window::openMeshModel(){
+
+    QString selectedFilter, openFileNameLabel;
+
+
+    QString fileFilter = "Known Filetypes (*.obj *.off);;OBJ (*.obj);;OFF (*.off)";
+
+    QString fileName = QFileDialog::getOpenFileName(this,
+                                                    tr("Select an input mesh"),
+                                                    openFileNameLabel,
+                                                    fileFilter,
+                                                    &selectedFilter);
+
+    // In case of Cancel
+    if ( fileName.isEmpty() ) {
+        return;
+    }
+
+    viewer->openModel(fileName);
+}
 
 void Window::openConstraints(){
     QString selectedFilter, openFileNameLabel;
@@ -164,7 +180,7 @@ void Window::openConstraints(){
         return;
     }
 
-    viewer->openOFFModel(fileName);
+    viewer->openConstraints(fileName);
 }
 
 void Window::initActions () {
@@ -177,8 +193,12 @@ void Window::initFileActions () {
     fileOpenMeshAction->setShortcut (tr ("Ctrl+O"));
     connect (fileOpenMeshAction, SIGNAL (triggered ()) , this, SLOT (openMesh ()));
 
+    QAction * fileOpenMeshModelAction = new QAction (QPixmap ("./Icons/fileopen.png"), "Open Model", this);
+    fileOpenMeshModelAction->setShortcut (tr ("Ctrl+O"));
+    connect (fileOpenMeshModelAction, SIGNAL (triggered ()) , this, SLOT (openMeshModel ()));
+
     QAction * fileOpenConstraintsAction = new QAction (QPixmap ("./Icons/fileopen.png"), "Open Constraints", this);
-   // fileOpenConstraintsAction->setShortcut (tr ("Ctrl+SHIFT+O"));
+    // fileOpenConstraintsAction->setShortcut (tr ("Ctrl+SHIFT+O"));
     connect (fileOpenConstraintsAction, SIGNAL (triggered ()) , this, SLOT (openConstraints()));
 
     QAction * fileSaveMeshAction = new QAction (QPixmap ("./Icons/filesave.png"), "Save Mesh", this);
@@ -192,6 +212,7 @@ void Window::initFileActions () {
     fileActionGroup = new QActionGroup (this);
 
     fileActionGroup->addAction (fileOpenMeshAction);
+    fileActionGroup->addAction (fileOpenMeshModelAction);
     fileActionGroup->addAction (fileOpenConstraintsAction);
     fileActionGroup->addAction (fileSaveMeshAction);
 

@@ -21,6 +21,7 @@ public:
     std::vector<Triangle> & getTriangles(){return triangles;}
     const std::vector<Triangle> & getTriangles()const {return triangles;}
 
+    unsigned int getVerticesNb(){ return vertices.size(); }
     void draw();
     void draw( std::vector<bool> & selected, std::vector<bool> & fixed);
 
